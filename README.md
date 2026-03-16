@@ -36,7 +36,8 @@ iPhone Shortcut (runs on automation, e.g. 08:00)
 
 The shortcut is called **"Oma Daily Speech"** and looks like this:
 
-![Oma Daily Speech shortcut](shortcut-screenshot.png)
+<img width="700" height="667" alt="image" src="https://github.com/user-attachments/assets/24e129cd-c177-4c23-bc44-42e5a7cdd0b1" />
+
 
 ### Steps to recreate it
 
