@@ -1,0 +1,48 @@
+name: Daily Meditation
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pick next video
+        run: |
+          python3 - <<'EOF'
+          import json, os
+
+          with open('videos.json') as f:
+              videos = json.load(f)
+
+          try:
+              with open('state.json') as f:
+                  state = json.load(f)
+          except:
+              state = {"index": 0}
+
+          idx = state.get("index", 0) % len(videos)
+          video = videos[idx]
+
+          with open('today.json', 'w') as f:
+              json.dump({"title": video["title"], "youtube_url": video["youtube_url"], "date": video["date"]}, f)
+
+          state["index"] = (idx + 1) % len(videos)
+          with open('state.json', 'w') as f:
+              json.dump(state, f)
+          EOF
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add today.json state.json
+          git commit -m "Daily meditation update"
+          git push
